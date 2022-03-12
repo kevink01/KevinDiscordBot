@@ -31,7 +31,6 @@ module.exports = {
                     }
                     let {
                         name,
-                        roles,
                         description,
                         permissions,
                         args,
@@ -39,26 +38,11 @@ module.exports = {
                     } = require(file);
                     const helpEmbed = new Discord.MessageEmbed()
                         .setAuthor(interaction.user.username, interaction.user.displayAvatarURL())
-                        .setDescription(`More information about the ${target} command`);
+                        .setDescription(description);
                     if (name) {
-                        helpEmbed.addField('Command name', name, true)
+                        helpEmbed.setTitle(name[0].toUpperCase() + name.substring(1));
                     }
 
-                    if (roles) {
-                        if (typeof roles === 'object') {
-                            let roleStr = '';
-                            for (let i = 0; i < roles.length; i++) {
-                                roleStr += roles[i] + ', '
-                            }
-                            if (roleStr !== '') {
-                                roleStr = roleStr.substring(0, roleStr.length - 2);
-                                helpEmbed.addField('Required Roles', roleStr);
-                            }
-                        }
-                        else if (typeof roles === 'string') {
-                            helpEmbed.addField('Required Roles', roles);
-                        }
-                    }
                     if (permissions) {
                         if (typeof permissions === 'object') {
                             let permStr = '';
@@ -71,15 +55,12 @@ module.exports = {
                             }
                         }
                         else if (typeof permissions === 'string') {
-                            helpEmbed.addField('Required Roles', permissions);
+                            helpEmbed.addField('Required Permissions', permissions, true);
                         }
-                    }
-                    if (description) {
-                        helpEmbed.addField('Description', description);
                     }
 
                     if (args) {
-                        helpEmbed.addField('Argument format', `+${target} ${args}`);
+                        helpEmbed.addField('Argument format', `+${name} ${args}`, true);
                     }
                     else {
                         helpEmbed.addField('Argument format', `+${name}`);

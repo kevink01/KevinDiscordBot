@@ -3,6 +3,7 @@ module.exports = (client, requirements) => {
         name,
         permissions = [],
         channels = [],
+        description,
     } = requirements;
 
     // Converts alias into an array

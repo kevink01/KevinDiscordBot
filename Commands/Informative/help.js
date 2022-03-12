@@ -1,25 +1,25 @@
-const { Discord } = require('../../index');
+const { Discord, client } = require('../../index');
 const path = require('path');
 const fs = require('fs');
 
 module.exports = {
     name: 'help',
     maxArgs: 0,
-    roles: ['Member'],
-    description: 'A command for finding more information about other available commands',
+    description: 'Find out more information about commands!',
     execute(message, args) {
         let commands = [];
         const readFiles = (directory) => {
             const files = fs.readdirSync(path.join(__dirname, directory));
             for (const file of files) {
-                const stats = fs.lstatSync(path.join(__dirname, directory, file));
+                const fullPath = path.join(__dirname, directory, file);
+                const stats = fs.lstatSync(fullPath);
                 if (stats.isDirectory()) {
                     readFiles(path.join(directory, file));
                 }
                 else {
-                    commands.push(file.substring(0, file.indexOf('.')));
-                }
-                
+                    let { description } = require(fullPath);
+                    commands.push([file.substring(0, file.indexOf('.js')), description]);
+                } 
             }
         }
 
@@ -30,9 +30,9 @@ module.exports = {
         for (let i = 0; i < commands.length; i++) {
             select.addOptions([
                 {
-                    label: commands[i],
-                    value: commands[i],
-                    description: `Click me for information about the ${commands[i]} command`
+                    label: commands[i][0],
+                    value: commands[i][0],
+                    description: commands[i][1]
                 }
             ])
         }

@@ -5,7 +5,7 @@ module.exports = {
     args: '<user>',
     minArgs: 1,
     maxArgs: 1,
-    description: 'Provids information about a user\'s joined date and created account date',
+    description: 'Retrieves user account information',
     examples: [
         '+createdOn @UserTag',
         '+createdOn 123456789012345678'

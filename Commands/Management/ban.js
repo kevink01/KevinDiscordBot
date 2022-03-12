@@ -2,15 +2,15 @@ const { Discord, client } = require('../../index')
 const { delay } = require('../../Utility/functions.js')
 
 module.exports = {
-    name: 'kick',
+    name: 'ban',
     args: '<user> [reason]',
     minArgs: 1,
     maxArgs: 2,
-    permissions: 'KICK_MEMBERS',
-    description: 'Kicks a user from the server',
+    permissions: 'BAN_MEMBERS',
+    description: 'Ban a user from the server',
     examples: [
-        '+kick @User -> Kicks user (no reason given)',
-        '+kick @User [reason] -> Kicks user (with reason)'
+        `+ban @User -> Bans user with no reason
+         +ban @User spam -> Bans user with reason \'spam\'`
     ],
     async execute(message, args) {
         let reason = args[1];
@@ -22,8 +22,8 @@ module.exports = {
             message.channel.bulkDelete(2);
             return;
         }
-        if (!user.kickable) {
-            await message.channel.send('You cannot kick this member.');
+        if (!user.bannable) {
+            await message.channel.send('You cannot ban this member.');
             await delay(2000);
             message.channel.bulkDelete(2);
             return;
@@ -31,7 +31,7 @@ module.exports = {
         const embed = new Discord.MessageEmbed()
         .setColor("DARK_RED")
         .setAuthor(`${client.user.username}`, client.user.displayAvatarURL())
-        .setTitle(`You were kicked from ${message.guild.name}`)
+        .setTitle(`You were banned from ${message.guild.name}`)
         .addFields(
             { name: 'Reason:', value: `${reason}` }
         );
@@ -40,9 +40,9 @@ module.exports = {
             await delay(1000);
             message.channel.bulkDelete(1);
         });
-        user.kick(reason);
-        message.channel.send(`Successfully kicked\n**\`${user.user.username}\`**`);
+        user.ban({reason: reason});
+        message.channel.send(`Successfully banned\n**\`${user.user.username}\`**`);
         await delay(1000);
         message.channel.bulkDelete(1);
-    }
+    } 
 }

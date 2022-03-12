@@ -272,6 +272,5 @@ module.exports = {
             await delay(2000);
             askSetup(setup, setupMessage);
         }
-        
     }
 }
